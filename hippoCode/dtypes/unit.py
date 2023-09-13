@@ -47,7 +47,7 @@ class unit:
         #extract 2d array of only this templates shapes on all channels 
         temp_shapes = template_arr[self.best_template_ID][:][:]
         #extract the channel with the max template waveform
-        temp_bestChan = np.unravel_index(np.argmax(temp_shapes),shape = np.shape(temp_shapes))[1]
+        temp_bestChan = np.unravel_index(np.argmin(temp_shapes),shape = np.shape(temp_shapes))[1]
         #extract the waveform given best template ID and channel for this unit
         self._waveform = temp_shapes[:,temp_bestChan]
 
