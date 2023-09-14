@@ -14,12 +14,12 @@ def plot_unit_clusters(units : unitPopulation, ax = None):
         ax = fig.add_subplot(projection = '3d')
     
     #extract the units which will be plotted
-    for u in unitPopulation.units_list:
+    for u in units.units_list:
         if u.type == 'int':
-            ax.scatter(u.type_features[2],u.type_features[3], u.type_features[1],color = 'blue', label = 'interneuron')
+            ax.scatter(u.type_features[2],u.type_features[4], u.type_features[1],color = 'blue', label = 'interneuron')
         #
         elif u.type == 'pyr':
-            ax.scatter(u.type_features[2],u.type_features[3], u.type_features[1],color = 'red', label = 'pyramidal')
+            ax.scatter(u.type_features[2],u.type_features[4], u.type_features[1],color = 'red', label = 'pyramidal')
         #mua or lua - can plot the mua or lua as low brightness gray dots 
         else:
             continue

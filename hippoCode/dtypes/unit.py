@@ -15,6 +15,7 @@ class unit:
         self._peakVoltage = None
         self.type = None
         self.type_features = None
+        self.norm_features = None
         self._phyID = None
         self.phy_group = None
         self.phy_channel = None

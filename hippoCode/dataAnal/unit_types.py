@@ -1,4 +1,4 @@
-from dtypes import unit, unitPopulation
+from dtypes import unit , unitPopulation
 import numpy as np 
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
@@ -6,6 +6,7 @@ from plots.plot_unit_types import plot_unit_clusters
 
 
 def est_unit_types(units : unitPopulation, plot = True):
+    from sklearn.decomposition import PCA
     #collect the features from the units not labeled mua or lua 
     features = []
     unitInds = []
@@ -22,22 +23,37 @@ def est_unit_types(units : unitPopulation, plot = True):
 
     #convert fetures to np array
     features = np.asarray(features)
+    feature_labels = ['fr','isi','peak_trough_t','tau_decay','tau_rise']
     #normalize the features 
     scaler = StandardScaler()
-    scaler.fit_transform(features)
+    norm_features = scaler.fit_transform(features)
+    #perform PCA to 
+    '''
+    pca_unit_features = PCA(n_components=3)
+    pca_fitted = pca_unit_features.fit_transform(norm_features)
+    '''
     #run K-means with 2(pyr & inter) / 3 clusters(pyr, wide inter, narrow inter)
-    kmeans_fit = KMeans(n_clusters = 2, n_init = 50).fit(features)
-    cluster_labels = kmeans_fit.predict(features)
+    kmeans_fit = KMeans(n_clusters = 2, n_init = 50).fit(norm_features)
+    cluster_labels = kmeans_fit.predict(norm_features)
     #interneurons have the higher inst firing rates 
     interneurons_lbl = np.argmax(kmeans_fit.cluster_centers_[:,0])
+    pyr_lbl = np.argmin(kmeans_fit.cluster_centers_[:,-1])
     for clustID, ind in zip(cluster_labels,unitInds):
         if clustID == interneurons_lbl:
-            unitPopulation.units_list[ind].type = 'int'
+            units.units_list[ind].type = 'int'
+        elif clustID == pyr_lbl:
+            units.units_list[ind].type = 'pyr'
         else:
-            unitPopulation.units_list[ind].type = 'pyr'
+            units.units_list[ind].type = 'int_wide'
 
+        
+
+
+    '''
     if plot == True: 
         plot_unit_clusters(units)
+    '''
+
 
     
     
